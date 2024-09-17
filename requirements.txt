@@ -1,2 +1,4 @@
 twilio
-asyncio
+fastapi
+uvicorn
+python-multipart

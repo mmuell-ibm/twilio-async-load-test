@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-This project performs a load test using the Twilio API to simulate multiple concurrent phone calls. It uses a provided TwiML script to dictate the call's content and behavior. The setup includes a Docker environment to ensure consistent execution.
+This project performs a load test using the Twilio API to simulate multiple concurrent phone calls. It uses a provided TwiML script in XML format to dictate the call's content and behavior. The setup includes a Docker environment to ensure consistent execution.
 
 ## Environment Variables
 
@@ -14,7 +14,7 @@ The project relies on several environment variables. Ensure these are set in you
 - `TARGET_CALL_CENTER_NUMBER`: The target phone number for the calls.
 - `CONCURRENT_CALLS`: The number of concurrent calls to initiate.
 - `CALL_DELAY`: The delay (in seconds) between starting each call.
-- `TWIML_SCRIPT`: The TwiML script that dictates the call's content.
+- `TWIML_SCRIPT_PATH`: The file path to the TwiML XML script that dictates the call's content.
 
 ## Dockerfile
 
@@ -34,10 +34,19 @@ This script performs the following:
 3. **`load_test` Function**: Manages the creation of multiple concurrent calls with a staggered start.
 4. **Execution**: Runs the `load_test` function using `asyncio`.
 
+## FastAPI Application
+
+The FastAPI application provides a web interface to manage and update the TwiML script and other settings:
+
+1. **Read Form**: Displays a form to enter or update Twilio settings and the TwiML script.
+2. **Update Settings**: Handles form submissions to update the TwiML script and other settings, saving the script to an XML file specified in the `.env` file.
+
 ## Requirements
 
 - `twilio`: The Twilio Python library to interact with the Twilio API.
 - `asyncio`: A library for asynchronous programming in Python.
+- `fastapi`: For building the web interface.
+- `uvicorn`: For serving the FastAPI application.
 
 ## Running the Project
 
@@ -50,7 +59,7 @@ To build and run the Docker container:
 
 2. Run the Docker container with environment variables:
     ```bash
-    podman run --env-file .env --rm twilio-load-test
+    podman run --env-file .env -p 8000:8000 --rm twilio-load-test
     ```
 
 Alternatively, you can use the pre-built Docker container available on Quay.io:
@@ -60,12 +69,13 @@ Alternatively, you can use the pre-built Docker container available on Quay.io:
   To pull and run the container directly from Quay.io:
     ```bash
     podman pull quay.io/mattmule/twilio-load:main
-    podman run --env-file .env --rm quay.io/mattmule/twilio-load:main
+    podman run --env-file .env -p 8000:8000 --rm quay.io/mattmule/twilio-load:main
     ```
 
-Ensure your `.env` file is properly configured with the necessary environment variables before running the container.
+Ensure your `.env` file is properly configured with the necessary environment variables, including the path to the XML file for the TwiML script, before running the container.
 
 ## Notes
 
 - Ensure that all environment variables are correctly set to avoid issues during execution.
 - Adjust `CONCURRENT_CALLS` and `CALL_DELAY` as needed for your testing requirements.
+- The TwiML script should be stored in an XML file, and the path to this file should be specified in the `TWIML_SCRIPT_PATH` environment variable.

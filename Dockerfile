@@ -10,5 +10,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 # I Hate having to reinstall libraries after code changes
 COPY . .
 
-# Run the load test script
-CMD ["python", "load_test.py"]
+# Expose port for FastAPI
+EXPOSE 8000
+
+# Start the UI
+CMD ["sh", "-c", "uvicorn app:app --host 0.0.0.0 --port 8000"]
