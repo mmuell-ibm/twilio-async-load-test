@@ -53,6 +53,16 @@ To build and run the Docker container:
     podman run --env-file .env --rm twilio-load-test
     ```
 
+Alternatively, you can use the pre-built Docker container available on Quay.io:
+
+- **Quay.io Docker Container**: `quay.io/mattmule/twilio-load`
+
+  To pull and run the container directly from Quay.io:
+    ```bash
+    podman pull quay.io/mattmule/twilio-load:main
+    podman run --env-file .env --rm quay.io/mattmule/twilio-load:main
+    ```
+
 Ensure your `.env` file is properly configured with the necessary environment variables before running the container.
 
 ## Notes
